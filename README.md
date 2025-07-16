@@ -1,6 +1,6 @@
-# Tailwind CSS + React + Vite Template
+# Tailwind CSS v3 + React + Vite Template
 
-A clean, modern template for React projects with Tailwind CSS v4 and Vite. This template eliminates the common setup headaches and gets you building beautiful UIs immediately.
+A clean, modern template for React projects with Tailwind CSS v3 and Vite. This template eliminates the common setup headaches and gets you building beautiful UIs immediately.
 
 ## 🚀 Quick Start
 
@@ -11,6 +11,7 @@ Click "Use this template" or clone directly:
 ```bash
 git clone https://github.com/Grizak/tailwind-react-vite-template.git my-project
 cd my-project
+git checkout tailwind-v3.x.x
 npm install
 npm run dev
 ```
@@ -19,7 +20,7 @@ npm run dev
 
 - ⚡ **Vite** - Fast build tool and dev server
 - ⚛️ **React 18** - Latest React with modern features
-- 🎨 **Tailwind CSS v4** - Latest utility-first CSS framework
+- 🎨 **Tailwind CSS v3** - Stable, production-ready utility-first CSS framework
 - 🔧 **PostCSS** - Seamless CSS processing
 - 📦 **All configured** - Ready to use, no setup required
 
@@ -54,22 +55,20 @@ npm run build
 
 Automatically purges unused CSS and optimizes for production. Your final bundle only includes the Tailwind classes you actually use.
 
-### Modern Tailwind v4
+### Battle-Tested Tailwind v3
 
-This template uses Tailwind CSS v4 with the latest features and improved performance.
+This template uses Tailwind CSS v3, the stable and widely-adopted version with excellent ecosystem support.
 
 ## 🔧 Configuration Details
 
-### Tailwind v4 Setup
-
-Unlike v3, Tailwind v4 uses a streamlined setup:
+### Tailwind v3 Setup
 
 **postcss.config.js**
 
 ```javascript
 export default {
   plugins: {
-    "@tailwindcss/postcss": {},
+    tailwindcss: {},
     autoprefixer: {},
   },
 };
@@ -78,7 +77,9 @@ export default {
 **src/index.css**
 
 ```css
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 ```
 
 ### Content Configuration
@@ -87,6 +88,7 @@ The template is configured to scan all your React files:
 
 ```javascript
 // tailwind.config.js
+/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -118,16 +120,17 @@ function App() {
 }
 ```
 
-## 🆚 Tailwind v3 vs v4
+## 🆚 Why Tailwind v3?
 
-If you're familiar with Tailwind v3, here are the key differences in v4:
+Tailwind CSS v3 offers several advantages for production projects:
 
-| Feature        | v3                                                           | v4                           |
-| -------------- | ------------------------------------------------------------ | ---------------------------- |
-| CSS Import     | `@tailwind base; @tailwind components; @tailwind utilities;` | `@import "tailwindcss";`     |
-| PostCSS Plugin | `tailwindcss: {}`                                            | `"@tailwindcss/postcss": {}` |
-| Performance    | Good                                                         | Improved                     |
-| Setup          | More complex                                                 | Streamlined                  |
+| Feature              | Benefit                                                       |
+| -------------------- | ------------------------------------------------------------- |
+| **Stability**        | Mature, well-tested codebase with extensive community support |
+| **Plugin Ecosystem** | Large selection of official and community plugins             |
+| **JIT Compiler**     | Just-in-time compilation for faster builds and smaller CSS    |
+| **Arbitrary Values** | Use custom values like `w-[300px]` or `text-[#50d71e]`        |
+| **Documentation**    | Comprehensive docs and tutorials                              |
 
 ## 🛠️ Customization
 
@@ -136,15 +139,25 @@ If you're familiar with Tailwind v3, here are the key differences in v4:
 Extend the theme in `tailwind.config.js`:
 
 ```javascript
+/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
         "custom-blue": "#1e40af",
+        brand: {
+          50: "#eff6ff",
+          500: "#3b82f6",
+          900: "#1e3a8a",
+        },
       },
       fontFamily: {
         custom: ["Inter", "sans-serif"],
+      },
+      spacing: {
+        18: "4.5rem",
+        88: "22rem",
       },
     },
   },
@@ -154,28 +167,56 @@ export default {
 
 ### Adding Tailwind Plugins
 
+Install popular Tailwind v3 plugins:
+
 ```bash
-npm install @tailwindcss/forms
+npm install -D @tailwindcss/forms @tailwindcss/typography @tailwindcss/aspect-ratio
 ```
 
 ```javascript
 // tailwind.config.js
 import forms from "@tailwindcss/forms";
+import typography from "@tailwindcss/typography";
+import aspectRatio from "@tailwindcss/aspect-ratio";
 
+/** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {},
   },
-  plugins: [forms],
+  plugins: [forms, typography, aspectRatio],
 };
+```
+
+### Using Custom Components
+
+Create reusable components with `@apply`:
+
+```css
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors;
+  }
+
+  .card {
+    @apply bg-white p-6 rounded-lg shadow-lg;
+  }
+}
 ```
 
 ## 📚 Helpful Resources
 
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Tailwind CSS v3 Documentation](https://tailwindcss.com/docs)
+- [Tailwind CSS v3 Playground](https://play.tailwindcss.com/)
 - [Vite Documentation](https://vitejs.dev/)
 - [React Documentation](https://react.dev/)
+- [Tailwind UI Components](https://tailwindui.com/)
 
 ## 🐛 Troubleshooting
 
@@ -183,16 +224,29 @@ export default {
 
 1. Check that classes are spelled correctly
 2. Ensure `src/index.css` is imported in `main.jsx`
-3. Restart the dev server: `npm run dev`
+3. Verify the `@tailwind` directives are in your CSS file
+4. Restart the dev server: `npm run dev`
 
-### Need to Switch to Tailwind v3?
+### Purging Issues?
 
-```bash
-npm uninstall tailwindcss @tailwindcss/postcss
-npm install -D tailwindcss@^3.4.0 postcss autoprefixer
+Make sure your `content` array in `tailwind.config.js` includes all files where you use Tailwind classes:
+
+```javascript
+content: [
+  "./index.html",
+  "./src/**/*.{js,ts,jsx,tsx}",
+  "./components/**/*.{js,ts,jsx,tsx}",
+],
 ```
 
-Then update your configs to use v3 syntax.
+### Need to Upgrade to Tailwind v4?
+
+```bash
+npm uninstall tailwindcss
+npm install -D tailwindcss@next @tailwindcss/postcss
+```
+
+Then update your configs to use v4 syntax.
 
 ## 🤝 Contributing
 
@@ -206,4 +260,4 @@ This template is available under the [MIT License](LICENSE).
 
 **Happy coding!** 🎉
 
-Start building beautiful UIs with Tailwind CSS without the setup headaches.
+Start building beautiful UIs with Tailwind CSS v3 without the setup headaches.
